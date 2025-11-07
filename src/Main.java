@@ -68,7 +68,7 @@ public class Main {
 
         //cart display
         JPanel cart = new JPanel();
-        cart.setBackground(Color.RED);
+        //cart.setBackground(Color.RED);
         cart.setBounds(400, 70, 400, 280);
         cart.setLayout(null);
 
