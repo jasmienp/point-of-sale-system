@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class Main {
@@ -70,13 +71,23 @@ public class Main {
         JPanel cart = new JPanel();
         //cart.setBackground(Color.RED);
         cart.setBounds(400, 70, 400, 280);
-        cart.setLayout(null);
+        cart.setLayout(new BorderLayout());
 
         JLabel cartLabel = new JLabel("CURRENT ORDER");
         cartLabel.setFont(new Font("Century Gothic", Font.BOLD, 28));
         cartLabel.setForeground(Color.BLACK);
         cartLabel.setHorizontalAlignment(JLabel.LEFT);
         cartLabel.setBounds(10, 0, 400, 50);
+
+        String[] columnNames = {"Item", "Qty", "Price"}; // NEW: table for cart display
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // to prevent manual editing
+            }
+        };
+        JTable cartTable = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(cartTable);
 
         //clear order and check out buttons
         JPanel buttons = new JPanel();
@@ -92,7 +103,8 @@ public class Main {
         menu.add(menuLabel);
         menu.add(productPanel);
         frame.add(menu);
-        cart.add(cartLabel);
+        cart.add(cartLabel, BorderLayout.NORTH);
+        cart.add(scrollPane, BorderLayout.CENTER);
         frame.add(cart);
         frame.add(buttons);
         frame.add(display);
