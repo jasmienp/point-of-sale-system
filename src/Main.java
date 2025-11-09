@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class Main {
     public static void main(String[] args) {
@@ -85,8 +87,29 @@ public class Main {
 
         //total display
         JPanel display = new JPanel();
-        display.setBackground(Color.YELLOW);
-        display.setBounds(400, 350, 400, 180);
+        BoxLayout boxLayout = new BoxLayout(display, BoxLayout.Y_AXIS);
+        display.setLayout(boxLayout);
+
+        JLabel subtotalLabel = new JLabel("SUBTOTAL: ");
+        subtotalLabel.setFont(new Font("Century Gothic",Font.BOLD, 28));
+        subtotalLabel.setForeground(Color.BLACK);
+        subtotalLabel.setHorizontalAlignment(JLabel.LEFT);
+
+        JLabel taxLabel = new JLabel("TAX: ");
+        taxLabel.setFont(new Font("Century Gothic",Font.BOLD, 28));
+        taxLabel.setForeground(Color.BLACK);
+        taxLabel.setHorizontalAlignment(JLabel.LEFT);
+
+        JLabel totalLabel = new JLabel("TOTAL: ");
+        totalLabel.setFont(new Font("Century Gothic",Font.BOLD, 30));
+        totalLabel.setForeground(Color.BLACK);
+        totalLabel.setHorizontalAlignment(JLabel.LEFT);
+
+        display.add(subtotalLabel);
+        display.add(taxLabel);
+        display.add(totalLabel);
+
+        display.setBounds(410, 450, 400, 180);
 
         frame.add(title);
         menu.add(menuLabel);
