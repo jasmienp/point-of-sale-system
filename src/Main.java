@@ -1,8 +1,34 @@
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
-import java.text.NumberFormat;
-import java.util.Locale;
+
+class totalDisplay {
+    private JTable cartTable;
+    final double tax = 8.00;
+
+    public void setCartTable(JTable table) {
+        this.cartTable = table;
+    }
+
+    double calculateSubtotal() {
+        double subtotal = 0.00;
+        for (int i = 1; i < cartTable.getRowCount(); i++) {
+            int quantity = Integer.parseInt(cartTable.getValueAt(i, 1).toString());
+            double price = Double.parseDouble(cartTable.getValueAt(i, 2).toString());
+            subtotal += quantity * price;
+        }
+
+        return subtotal;
+    }
+
+    double calculateTax() {
+        return ((tax / 100) * calculateSubtotal());
+    }
+
+    double calculateTotal() {
+        return calculateSubtotal() + calculateTax();
+    }
+}
 
 public class Main {
     public static void main(String[] args) {
@@ -90,17 +116,20 @@ public class Main {
         BoxLayout boxLayout = new BoxLayout(display, BoxLayout.Y_AXIS);
         display.setLayout(boxLayout);
 
-        JLabel subtotalLabel = new JLabel("SUBTOTAL: ");
+        totalDisplay totals = new totalDisplay();
+        totals.setCartTable(cartTable);
+
+        JLabel subtotalLabel = new JLabel("SUBTOTAL: " +totals.calculateSubtotal());
         subtotalLabel.setFont(new Font("Century Gothic",Font.BOLD, 28));
         subtotalLabel.setForeground(Color.BLACK);
         subtotalLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel taxLabel = new JLabel("TAX: ");
+        JLabel taxLabel = new JLabel("TAX: " + totals.calculateTax());
         taxLabel.setFont(new Font("Century Gothic",Font.BOLD, 28));
         taxLabel.setForeground(Color.BLACK);
         taxLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel totalLabel = new JLabel("TOTAL: ");
+        JLabel totalLabel = new JLabel("TOTAL: " + totals.calculateTotal());
         totalLabel.setFont(new Font("Century Gothic",Font.BOLD, 30));
         totalLabel.setForeground(Color.BLACK);
         totalLabel.setHorizontalAlignment(JLabel.LEFT);
