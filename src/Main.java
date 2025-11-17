@@ -123,7 +123,7 @@ public class Main {
         subtotalLabel.setForeground(Color.BLACK);
         subtotalLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel taxLabel = new JLabel("TAX: " + "₱" + totals.calculateTax());
+        JLabel taxLabel = new JLabel("TAX (8%): " + "₱" + totals.calculateTax());
         taxLabel.setFont(new Font("Century Gothic",Font.BOLD, 28));
         taxLabel.setForeground(Color.BLACK);
         taxLabel.setHorizontalAlignment(JLabel.LEFT);
