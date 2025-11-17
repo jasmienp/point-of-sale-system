@@ -18,15 +18,15 @@ class totalDisplay {
             subtotal += quantity * price;
         }
 
-        return subtotal;
+        return Double.parseDouble(String.format("%.2f", subtotal));
     }
 
     double calculateTax() {
-        return ((tax / 100) * calculateSubtotal());
+        return Double.parseDouble(String.format("%.2f", ((tax / 100) * calculateSubtotal())));
     }
 
     double calculateTotal() {
-        return calculateSubtotal() + calculateTax();
+        return Double.parseDouble(String.format("%.2f", (calculateSubtotal() + calculateTax())));
     }
 }
 
@@ -113,23 +113,22 @@ public class Main {
 
         //total display
         JPanel display = new JPanel();
-        BoxLayout boxLayout = new BoxLayout(display, BoxLayout.Y_AXIS);
-        display.setLayout(boxLayout);
+        display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
 
         totalDisplay totals = new totalDisplay();
         totals.setCartTable(cartTable);
 
-        JLabel subtotalLabel = new JLabel("SUBTOTAL: " +totals.calculateSubtotal());
+        JLabel subtotalLabel = new JLabel("SUBTOTAL: " + "₱" + totals.calculateSubtotal());
         subtotalLabel.setFont(new Font("Century Gothic",Font.BOLD, 28));
         subtotalLabel.setForeground(Color.BLACK);
         subtotalLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel taxLabel = new JLabel("TAX: " + totals.calculateTax());
+        JLabel taxLabel = new JLabel("TAX: " + "₱" + totals.calculateTax());
         taxLabel.setFont(new Font("Century Gothic",Font.BOLD, 28));
         taxLabel.setForeground(Color.BLACK);
         taxLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel totalLabel = new JLabel("TOTAL: " + totals.calculateTotal());
+        JLabel totalLabel = new JLabel("TOTAL: " + "₱" + totals.calculateTotal());
         totalLabel.setFont(new Font("Century Gothic",Font.BOLD, 30));
         totalLabel.setForeground(Color.BLACK);
         totalLabel.setHorizontalAlignment(JLabel.LEFT);
