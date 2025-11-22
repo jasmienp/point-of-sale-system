@@ -1,62 +1,61 @@
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
-// Simple product base class
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, FontFormatException {
+        // font
+        Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/Bogista-DEMO.otf")).deriveFont(24f);
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge.registerFont(customFont);
+
+        // frame
         JFrame frame = new JFrame();
-        frame.setTitle("Point of Sale System");
+        frame.setTitle("Coffee Culture Point of Sale System");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setBackground(Color.decode("#FEFCEF"));
         frame.setResizable(false);
-        frame.setSize(800, 600);
+        frame.setSize(600, 500);
         frame.setLayout(null);
         frame.setLocationRelativeTo(null);
 
-        JLabel title = new JLabel("POINT OF SALE SYSTEM");
-        title.setFont(new Font("Century Gothic", Font.BOLD, 30));
-        title.setForeground(Color.BLACK);
+        // POS cafè name
+        JLabel title = new JLabel("Coffee Culture");
+        title.setFont(customFont.deriveFont(42f));
+        title.setForeground(Color.decode("#C13631"));
         title.setHorizontalAlignment(JLabel.CENTER);
-        title.setBounds(0, 10, 800, 60);
-        title.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
+        title.setBounds(0, 10, 600, 60);
 
-        // menu display
-        JPanel menu = new JPanel();
-        menu.setBounds(0, 70, 400, 380);
-        menu.setLayout(null);
+        // product panel
+        JPanel productPanel = new JPanel(new GridLayout(3, 2, 8, 8));
+        productPanel.setBounds(0, 70, 335, 393);
+        productPanel.setBackground(Color.decode("#C13631"));
+        productPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
-        JLabel menuLabel = new JLabel("MENU");
-        menuLabel.setFont(new Font("Century Gothic", Font.BOLD, 28));
-        menuLabel.setForeground(Color.BLACK);
-        menuLabel.setHorizontalAlignment(JLabel.LEFT);
-        menuLabel.setBounds(25, 0, 400, 50);
-
-        // create products
+        // product buttons inside product panel
         Product[] products = {
-                new FoodItem("Berry Danish", 120.00, "images/berry-danish.png"),
-                new FoodItem("Caramel Frappuccino", 180.00, "images/caramel-frappuccino.png"),
-                new FoodItem("Latte", 150.00,  "images/latte.png"),
-                new FoodItem("Matcha Swiss Roll", 130.00, "images/matcha-swiss-roll.png"),
-                new FoodItem("Mocha Coffee", 160.00, "images/mocha-coffee.png"),
+                new FoodItem("Berry Glaze Danish", 120.00, "images/berry-danish.png"),
+                new FoodItem("Matcha Cloud Roll", 130.00, "images/matcha-swiss-roll.png"),
+                new FoodItem("Artisan Latte", 150.00,  "images/latte.png"),
+                new FoodItem("Velvet Mocha", 160.00, "images/mocha-coffee.png"),
+                new FoodItem("Caramel Frappe", 180.00, "images/caramel-frappuccino.png"),
                 new FoodItem("Strawberry Cheesecake", 180.00,  "images/strawberry-cheesecake.png"),
         };
 
-        // product buttons
-        JPanel productPanel = new JPanel(new GridLayout(3, 2, 10, 10));
-        productPanel.setBounds(25, 50, 350, 300);
-
         // cart display
         JPanel cart = new JPanel();
-        cart.setBounds(400, 70, 400, 300);
+        cart.setBounds(335, 70, 251, 260);
+        cart.setBackground(Color.decode("#C13631"));
         cart.setLayout(null);
 
-        JLabel cartLabel = new JLabel("CURRENT ORDER");
-        cartLabel.setFont(new Font("Century Gothic", Font.BOLD, 28));
-        cartLabel.setForeground(Color.BLACK);
+        JLabel cartLabel = new JLabel("Current Order");
+        cartLabel.setFont(customFont.deriveFont(24f));
+        cartLabel.setForeground(Color.decode("#FEFCEF"));
         cartLabel.setHorizontalAlignment(JLabel.LEFT);
-        cartLabel.setBounds(10, 0, 400, 50);
-
+        cartLabel.setBounds(0, 5, 251, 30);
 
         // cart table
         String[] columnNames = {"Item", "Quantity", "Price"};
@@ -67,25 +66,36 @@ public class Main {
                 return false;
             }
         };
+
         JTable cartTable = new JTable(model);
-        JScrollPane cartScroll = new JScrollPane(cartTable);
-        cartScroll.setBounds(10, 50, 380, 200);
-        cart.add(cartScroll);
+        cartTable.setBounds(0, 65, 241, 120);
+
+        JTableHeader header = cartTable.getTableHeader();
+        header.setBounds(0, 35, 241, 30);
+
+        cart.add(header);
+        cart.add(cartTable);
 
         // total display
         JPanel display = new JPanel();
+        display.setBackground(Color.decode("#FEFCEF"));
         BoxLayout boxLayout = new BoxLayout(display, BoxLayout.Y_AXIS);
         display.setLayout(boxLayout);
 
         totalDisplay totals = new totalDisplay();
         totals.setCartTable(cartTable);
 
-        JLabel subtotalLabel = new JLabel("SUBTOTAL: 0.00");
-        subtotalLabel.setFont(new Font("Century Gothic", Font.BOLD, 28));
-        JLabel taxLabel = new JLabel("TAX: 0.00");
-        taxLabel.setFont(new Font("Century Gothic", Font.BOLD, 28));
-        JLabel totalLabel = new JLabel("TOTAL: 0.00");
-        totalLabel.setFont(new Font("Century Gothic", Font.BOLD, 30));
+        JLabel subtotalLabel = new JLabel("Subtotal: 0.00");
+        subtotalLabel.setFont(customFont.deriveFont(28f));
+        subtotalLabel.setForeground(Color.decode("#4144AF"));
+
+        JLabel taxLabel = new JLabel("Tax: 0.00");
+        taxLabel.setFont(customFont.deriveFont(28f));
+        taxLabel.setForeground(Color.decode("#4144AF"));
+
+        JLabel totalLabel = new JLabel("Total: 0.00");
+        totalLabel.setFont(customFont.deriveFont(28f));
+        totalLabel.setForeground(Color.decode("#4144AF"));
 
         display.add(subtotalLabel);
         display.add(taxLabel);
@@ -95,25 +105,14 @@ public class Main {
         // wire product buttons to cart
         for (Product product : products) {
             ImageIcon rawIcon = product.getImage();
-            Image scaledImage = rawIcon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
+            Image scaledImage = rawIcon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
-            String label = "<html>" + product.getName() + "<br>₱" + String.format("%.2f", product.getPrice()) + "</html>";
-            JButton prodButton = new JButton(label, scaledIcon);
-
-            prodButton.setHorizontalAlignment(JButton.LEFT);
-            prodButton.setHorizontalTextPosition(JButton.RIGHT);
-            prodButton.setVerticalTextPosition(JButton.CENTER);
-            prodButton.setFont(new Font("Century Gothic", Font.BOLD, 12));
-            prodButton.setFocusPainted(false);
-            prodButton.setBackground(Color.WHITE);
-            prodButton.setOpaque(true);
-            prodButton.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(Color.GRAY, 1),
-                    BorderFactory.createEmptyBorder(5, 10, 5, 10)
-            ));
-
-
+            ProductButton prodButton = new ProductButton(
+                    product.getName(),
+                    product.getPrice(),
+                    scaledIcon.getImage()
+            );
 
             // add to cart when clicked
             prodButton.addActionListener(e -> {
@@ -168,12 +167,43 @@ public class Main {
 
 
         frame.add(title);
-        menu.add(menuLabel);
-        menu.add(productPanel);
-        frame.add(menu);
+        frame.add(productPanel);
         cart.add(cartLabel);
         frame.add(cart);
         frame.add(display);
+
+        JPanel buttons = new JPanel();
+        buttons.setBounds(0, 450, 400, 80);
+        buttons.setBackground(Color.decode("#FEFCEF"));
+        buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+
+        JButton clearButton = new JButton("Clear Cart");
+        clearButton.setFont(new Font("Century Gothic", Font.BOLD, 14));
+        clearButton.setBackground(Color.RED);
+        clearButton.setForeground(Color.WHITE);
+        clearButton.setFocusPainted(false);
+        clearButton.addActionListener(e -> {
+            model.setRowCount(0);
+            display.setVisible(false);
+        });
+
+        JButton checkoutButton = new JButton("Check Out");
+        checkoutButton.setFont(new Font("Century Gothic", Font.BOLD, 14));
+        checkoutButton.setBackground(Color.GREEN.darker());
+        checkoutButton.setForeground(Color.WHITE);
+        checkoutButton.setFocusPainted(false);
+        checkoutButton.addActionListener(e -> {
+            subtotalLabel.setText("SUBTOTAL: " + String.format("%.2f", totals.calculateSubtotal()));
+            taxLabel.setText("TAX: " + String.format("%.2f", totals.calculateTax()));
+            totalLabel.setText("TOTAL: " + String.format("%.2f", totals.calculateTotal()));
+
+            display.setVisible(true);
+        });
+
+        buttons.add(clearButton);
+        buttons.add(checkoutButton);
+        frame.add(buttons);
+
         frame.setVisible(true);
     }
 }
