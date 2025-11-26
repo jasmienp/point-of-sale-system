@@ -5,6 +5,34 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+class totalDisplay {
+    private JTable cartTable;
+    final double tax = 8.00;
+
+    public void setCartTable(JTable table) {
+        this.cartTable = table;
+    }
+
+    double calculateSubtotal() {
+        double subtotal = 0.00;
+        for (int i = 1; i < cartTable.getRowCount(); i++) {
+            int quantity = Integer.parseInt(cartTable.getValueAt(i, 1).toString());
+            double price = Double.parseDouble(cartTable.getValueAt(i, 2).toString());
+            subtotal += quantity * price;
+        }
+
+        return Double.parseDouble(String.format("%.2f", subtotal));
+    }
+
+    double calculateTax() {
+        return Double.parseDouble(String.format("%.2f", ((tax / 100) * calculateSubtotal())));
+    }
+
+    double calculateTotal() {
+        return Double.parseDouble(String.format("%.2f", (calculateSubtotal() + calculateTax())));
+    }
+}
+
 public class Main {
     public static void main(String[] args) throws IOException, FontFormatException {
         // font
@@ -165,6 +193,33 @@ public class Main {
             }
         });
 
+        //total display
+        JPanel display = new JPanel();
+        display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
+
+        totalDisplay totals = new totalDisplay();
+        totals.setCartTable(cartTable);
+
+        JLabel subtotalLabel = new JLabel("SUBTOTAL: " + "₱" + totals.calculateSubtotal());
+        subtotalLabel.setFont(new Font("Century Gothic",Font.BOLD, 28));
+        subtotalLabel.setForeground(Color.BLACK);
+        subtotalLabel.setHorizontalAlignment(JLabel.LEFT);
+
+        JLabel taxLabel = new JLabel("TAX: " + "₱" + totals.calculateTax());
+        taxLabel.setFont(new Font("Century Gothic",Font.BOLD, 28));
+        taxLabel.setForeground(Color.BLACK);
+        taxLabel.setHorizontalAlignment(JLabel.LEFT);
+
+        JLabel totalLabel = new JLabel("TOTAL: " + "₱" + totals.calculateTotal());
+        totalLabel.setFont(new Font("Century Gothic",Font.BOLD, 30));
+        totalLabel.setForeground(Color.BLACK);
+        totalLabel.setHorizontalAlignment(JLabel.LEFT);
+
+        display.add(subtotalLabel);
+        display.add(taxLabel);
+        display.add(totalLabel);
+
+        display.setBounds(410, 450, 400, 180);
 
         frame.add(title);
         frame.add(productPanel);
