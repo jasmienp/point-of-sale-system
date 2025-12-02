@@ -127,7 +127,7 @@ public class Main {
             );
 
             // add to cart when clicked
-            prodButton.addActionListener(e -> {
+            prodButton.addActionListener(_ -> {
                 boolean found = false;
 
                 for (int i = 0; i < model.getRowCount(); i++) {
@@ -159,7 +159,7 @@ public class Main {
         decreaseButton.setMargin(new Insets(0, 0, 0, 0));
         decreaseButton.setFocusPainted(false);
 
-        decreaseButton.addActionListener(e -> {
+        decreaseButton.addActionListener(_ -> {
             int selectedRow = cartTable.getSelectedRow();
             if (selectedRow != -1) { // ensure a row is selected
                 int quantity = Integer.parseInt(model.getValueAt(selectedRow, 1).toString());
@@ -186,7 +186,7 @@ public class Main {
         clearButton.setMargin(new Insets(0, 0, 0, 0));
         clearButton.setFocusPainted(false);
 
-        clearButton.addActionListener(e -> {
+        clearButton.addActionListener(_ -> {
             model.setRowCount(0);
             display.setVisible(false);
         });
@@ -199,7 +199,7 @@ public class Main {
         checkoutButton.setMargin(new Insets(0, 0, 0, 0));
         checkoutButton.setFocusPainted(false);
 
-        checkoutButton.addActionListener(e -> {
+        checkoutButton.addActionListener(_ -> {
             subtotalLabel.setText("Subtotal: " + String.format("%.2f", totals.calculateSubtotal()));
             taxLabel.setText("Tax: " + String.format("%.2f", totals.calculateTax()));
             totalLabel.setText("Total: " + String.format("%.2f", totals.calculateTotal()));
