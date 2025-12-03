@@ -166,6 +166,19 @@ public class Main {
                 totalLabel.setText("TOTAL: " + String.format("%.2f", totals.calculateTotal()));
             });
 
+            // rise hover effect on buttons
+            prodButton.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    prodButton.setLocation(prodButton.getX(), prodButton.getY() - 3);
+                }
+
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    prodButton.setLocation(prodButton.getX(), prodButton.getY() + 3);
+                }
+            });
+
             productPanel.add(prodButton);
         }
 
@@ -232,6 +245,7 @@ public class Main {
         buttons.setBackground(Color.decode("#FEFCEF"));
         buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
 
+        // button to clear cart
         JButton clearButton = new JButton("Clear Cart");
         clearButton.setFont(new Font("Century Gothic", Font.BOLD, 14));
         clearButton.setBackground(Color.RED);
@@ -242,6 +256,7 @@ public class Main {
             display.setVisible(false);
         });
 
+        // button to check out cart
         JButton checkoutButton = new JButton("Check Out");
         checkoutButton.setFont(new Font("Century Gothic", Font.BOLD, 14));
         checkoutButton.setBackground(Color.GREEN.darker());
