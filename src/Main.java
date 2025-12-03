@@ -147,6 +147,19 @@ public class Main {
                 }
             });
 
+            // rise hover effect on buttons
+            prodButton.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    prodButton.setLocation(prodButton.getX(), prodButton.getY() - 3);
+                }
+
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    prodButton.setLocation(prodButton.getX(), prodButton.getY() + 3);
+                }
+            });
+
             productPanel.add(prodButton);
         }
 
@@ -191,6 +204,7 @@ public class Main {
             display.setVisible(false);
         });
 
+        // button to check out cart
         JButton checkoutButton = new JButton("Check Out");
         checkoutButton.setBounds(0, 230, 241, 25);
         checkoutButton.setFont(subtitleFont.deriveFont(14f));
