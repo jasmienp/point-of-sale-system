@@ -1,44 +1,19 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-class totalDisplay {
-    private JTable cartTable;
-    final double tax = 8.00;
-
-    public void setCartTable(JTable table) {
-        this.cartTable = table;
-    }
-
-    double calculateSubtotal() {
-        double subtotal = 0.00;
-        for (int i = 1; i < cartTable.getRowCount(); i++) {
-            int quantity = Integer.parseInt(cartTable.getValueAt(i, 1).toString());
-            double price = Double.parseDouble(cartTable.getValueAt(i, 2).toString());
-            subtotal += quantity * price;
-        }
-
-        return Double.parseDouble(String.format("%.2f", subtotal));
-    }
-
-    double calculateTax() {
-        return Double.parseDouble(String.format("%.2f", ((tax / 100) * calculateSubtotal())));
-    }
-
-    double calculateTotal() {
-        return Double.parseDouble(String.format("%.2f", (calculateSubtotal() + calculateTax())));
-    }
-}
-
 public class Main {
     public static void main(String[] args) throws IOException, FontFormatException {
         // font
-        Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/Bogista-DEMO.otf")).deriveFont(24f);
+        Font headerFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/Bogista-DEMO.otf")).deriveFont(24f);
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        ge.registerFont(customFont);
+        ge.registerFont(headerFont);
+
+        Font subtitleFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/Akwe-Pro-Bold.otf")).deriveFont(14f);
 
         // frame
         JFrame frame = new JFrame();
@@ -52,7 +27,7 @@ public class Main {
 
         // POS cafè name
         JLabel title = new JLabel("Coffee Culture");
-        title.setFont(customFont.deriveFont(42f));
+        title.setFont(headerFont.deriveFont(42f));
         title.setForeground(Color.decode("#C13631"));
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setBounds(0, 10, 600, 60);
@@ -75,18 +50,18 @@ public class Main {
 
         // cart display
         JPanel cart = new JPanel();
-        cart.setBounds(335, 70, 251, 260);
+        cart.setBounds(335, 70, 251, 264);
         cart.setBackground(Color.decode("#C13631"));
         cart.setLayout(null);
 
         JLabel cartLabel = new JLabel("Current Order");
-        cartLabel.setFont(customFont.deriveFont(24f));
+        cartLabel.setFont(headerFont.deriveFont(24f));
         cartLabel.setForeground(Color.decode("#FEFCEF"));
         cartLabel.setHorizontalAlignment(JLabel.LEFT);
         cartLabel.setBounds(0, 5, 251, 30);
 
         // cart table
-        String[] columnNames = {"Item", "Quantity", "Price"};
+        String[] columnNames = {"ITEM", "QTY", "PRICE"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
             // makes table not editable
             @Override
@@ -96,39 +71,48 @@ public class Main {
         };
 
         JTable cartTable = new JTable(model);
-        cartTable.setBounds(0, 65, 241, 120);
+        cartTable.setBounds(0, 54, 241, 96);
+        cartTable.setBackground(Color.decode("#C13631"));
+        cartTable.setForeground(Color.decode("#FEFCEF"));
+        cartTable.setFont(subtitleFont.deriveFont(12f));
+        cartTable.setShowGrid(true);
+        cartTable.setGridColor(Color.decode("#FEFCEF"));
+        cartTable.setBorder(BorderFactory.createLineBorder(Color.decode("#FEFCEF")));
+
+        TableColumnModel columnModel = cartTable.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(140);
+        columnModel.getColumn(1).setPreferredWidth(41);
+        columnModel.getColumn(2).setPreferredWidth(60);
 
         JTableHeader header = cartTable.getTableHeader();
-        header.setBounds(0, 35, 241, 30);
-
-        cart.add(header);
-        cart.add(cartTable);
+        header.setBounds(0, 35, 241, 20);
+        header.setBackground(Color.decode("#FEFCEF"));
+        header.setForeground(Color.decode("#C13631"));
+        header.setFont(subtitleFont.deriveFont(14f));
 
         // total display
-        JPanel display = new JPanel();
+        JPanel display = new JPanel(new BorderLayout());
         display.setBackground(Color.decode("#FEFCEF"));
-        BoxLayout boxLayout = new BoxLayout(display, BoxLayout.Y_AXIS);
-        display.setLayout(boxLayout);
+        display.setBounds(338, 336, 251, 122);
+
+        JPanel topDisplay = new JPanel();
+        topDisplay.setLayout(new BoxLayout(topDisplay, BoxLayout.Y_AXIS));
+        topDisplay.setBackground(Color.decode("#FEFCEF"));
 
         totalDisplay totals = new totalDisplay();
         totals.setCartTable(cartTable);
 
-        JLabel subtotalLabel = new JLabel("Subtotal: 0.00");
-        subtotalLabel.setFont(customFont.deriveFont(28f));
-        subtotalLabel.setForeground(Color.decode("#4144AF"));
+        JLabel subtotalLabel = new JLabel("");
+        subtotalLabel.setFont(subtitleFont.deriveFont(20f));
+        subtotalLabel.setForeground(Color.decode("#C13631"));
 
-        JLabel taxLabel = new JLabel("Tax: 0.00");
-        taxLabel.setFont(customFont.deriveFont(28f));
-        taxLabel.setForeground(Color.decode("#4144AF"));
+        JLabel taxLabel = new JLabel("");
+        taxLabel.setFont(subtitleFont.deriveFont(20f));
+        taxLabel.setForeground(Color.decode("#C13631"));
 
-        JLabel totalLabel = new JLabel("Total: 0.00");
-        totalLabel.setFont(customFont.deriveFont(28f));
-        totalLabel.setForeground(Color.decode("#4144AF"));
-
-        display.add(subtotalLabel);
-        display.add(taxLabel);
-        display.add(totalLabel);
-        display.setBounds(410, 450, 400, 180);
+        JLabel totalLabel = new JLabel("");
+        totalLabel.setFont(subtitleFont.deriveFont(28f));
+        totalLabel.setForeground(Color.decode("#C13631"));
 
         // wire product buttons to cart
         for (Product product : products) {
@@ -143,7 +127,7 @@ public class Main {
             );
 
             // add to cart when clicked
-            prodButton.addActionListener(e -> {
+            prodButton.addActionListener(_ -> {
                 boolean found = false;
 
                 for (int i = 0; i < model.getRowCount(); i++) {
@@ -161,9 +145,6 @@ public class Main {
                 if (!found) {
                     model.addRow(new Object[]{product.getName(), 1, product.getPrice()});
                 }
-                subtotalLabel.setText("SUBTOTAL: " + String.format("%.2f", totals.calculateSubtotal()));
-                taxLabel.setText("TAX: " + String.format("%.2f", totals.calculateTax()));
-                totalLabel.setText("TOTAL: " + String.format("%.2f", totals.calculateTotal()));
             });
 
             // rise hover effect on buttons
@@ -183,11 +164,15 @@ public class Main {
         }
 
         // button to decrease quantity
-        JButton decreaseButton = new JButton("Decrease Quantity");
-        decreaseButton.setBounds(10, 260, 180, 30);
-        cart.add(decreaseButton);
+        JButton decreaseButton = new JButton("Decrease Qty");
+        decreaseButton.setBounds(0, 166, 241, 25);
+        decreaseButton.setFont(subtitleFont.deriveFont(14f));
+        decreaseButton.setBackground(Color.decode("#FEFCEF"));
+        decreaseButton.setForeground(Color.decode("#C13631"));
+        decreaseButton.setMargin(new Insets(0, 0, 0, 0));
+        decreaseButton.setFocusPainted(false);
 
-        decreaseButton.addActionListener(e -> {
+        decreaseButton.addActionListener(_ -> {
             int selectedRow = cartTable.getSelectedRow();
             if (selectedRow != -1) { // ensure a row is selected
                 int quantity = Integer.parseInt(model.getValueAt(selectedRow, 1).toString());
@@ -198,82 +183,58 @@ public class Main {
                 }
 
                 // update totals
-                subtotalLabel.setText("SUBTOTAL: " + String.format("%.2f", totals.calculateSubtotal()));
-                taxLabel.setText("TAX: " + String.format("%.2f", totals.calculateTax()));
+                subtotalLabel.setText("Subtotal: " + String.format("%.2f", totals.calculateSubtotal()));
+                taxLabel.setText("Tax: " + String.format("%.2f", totals.calculateTax()));
                 totalLabel.setText("TOTAL: " + String.format("%.2f", totals.calculateTotal()));
             } else {
                 JOptionPane.showMessageDialog(frame, "Please select an item to decrease.");
             }
         });
 
-        //total display
-        JPanel display = new JPanel();
-        display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
-
-        totalDisplay totals = new totalDisplay();
-        totals.setCartTable(cartTable);
-
-        JLabel subtotalLabel = new JLabel("SUBTOTAL: " + "₱" + totals.calculateSubtotal());
-        subtotalLabel.setFont(new Font("Century Gothic",Font.BOLD, 28));
-        subtotalLabel.setForeground(Color.BLACK);
-        subtotalLabel.setHorizontalAlignment(JLabel.LEFT);
-
-        JLabel taxLabel = new JLabel("TAX (8%): " + "₱" + totals.calculateTax());
-        taxLabel.setFont(new Font("Century Gothic",Font.BOLD, 28));
-        taxLabel.setForeground(Color.BLACK);
-        taxLabel.setHorizontalAlignment(JLabel.LEFT);
-
-        JLabel totalLabel = new JLabel("TOTAL: " + "₱" + totals.calculateTotal());
-        totalLabel.setFont(new Font("Century Gothic",Font.BOLD, 30));
-        totalLabel.setForeground(Color.BLACK);
-        totalLabel.setHorizontalAlignment(JLabel.LEFT);
-
-        display.add(subtotalLabel);
-        display.add(taxLabel);
-        display.add(totalLabel);
-
-        display.setBounds(410, 450, 400, 180);
-
-        frame.add(title);
-        frame.add(productPanel);
-        cart.add(cartLabel);
-        frame.add(cart);
-        frame.add(display);
-
-        JPanel buttons = new JPanel();
-        buttons.setBounds(0, 450, 400, 80);
-        buttons.setBackground(Color.decode("#FEFCEF"));
-        buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
-
-        // button to clear cart
         JButton clearButton = new JButton("Clear Cart");
-        clearButton.setFont(new Font("Century Gothic", Font.BOLD, 14));
-        clearButton.setBackground(Color.RED);
-        clearButton.setForeground(Color.WHITE);
+        clearButton.setBounds(0, 198, 241, 25);
+        clearButton.setFont(subtitleFont.deriveFont(14f));
+        clearButton.setBackground(Color.decode("#FEFCEF"));
+        clearButton.setForeground(Color.decode("#C13631"));
+        clearButton.setMargin(new Insets(0, 0, 0, 0));
         clearButton.setFocusPainted(false);
-        clearButton.addActionListener(e -> {
+
+        clearButton.addActionListener(_ -> {
             model.setRowCount(0);
             display.setVisible(false);
         });
 
         // button to check out cart
         JButton checkoutButton = new JButton("Check Out");
-        checkoutButton.setFont(new Font("Century Gothic", Font.BOLD, 14));
-        checkoutButton.setBackground(Color.GREEN.darker());
-        checkoutButton.setForeground(Color.WHITE);
+        checkoutButton.setBounds(0, 230, 241, 25);
+        checkoutButton.setFont(subtitleFont.deriveFont(14f));
+        checkoutButton.setBackground(Color.decode("#FEFCEF"));
+        checkoutButton.setForeground(Color.decode("#C13631"));
+        checkoutButton.setMargin(new Insets(0, 0, 0, 0));
         checkoutButton.setFocusPainted(false);
-        checkoutButton.addActionListener(e -> {
-            subtotalLabel.setText("SUBTOTAL: " + String.format("%.2f", totals.calculateSubtotal()));
-            taxLabel.setText("TAX: " + String.format("%.2f", totals.calculateTax()));
-            totalLabel.setText("TOTAL: " + String.format("%.2f", totals.calculateTotal()));
+
+        checkoutButton.addActionListener(_ -> {
+            subtotalLabel.setText("Subtotal: " + String.format("%.2f", totals.calculateSubtotal()));
+            taxLabel.setText("Tax: " + String.format("%.2f", totals.calculateTax()));
+            totalLabel.setText("Total: " + String.format("%.2f", totals.calculateTotal()));
 
             display.setVisible(true);
         });
 
-        buttons.add(clearButton);
-        buttons.add(checkoutButton);
-        frame.add(buttons);
-
+        frame.add(title);
+        frame.add(productPanel);
+        cart.add(cartLabel);
+        cart.add(header);
+        cart.add(cartTable);
+        cart.add(decreaseButton);
+        cart.add(clearButton);
+        cart.add(checkoutButton);
+        frame.add(cart);
+        topDisplay.add(subtotalLabel);
+        topDisplay.add(taxLabel);
+        display.add(topDisplay, BorderLayout.CENTER);
+        display.add(totalLabel, BorderLayout.SOUTH);
+        frame.add(display);
         frame.setVisible(true);
     }
 }
