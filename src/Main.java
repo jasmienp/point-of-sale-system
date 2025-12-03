@@ -206,7 +206,7 @@ public class Main {
             }
         });
 
-        // total display
+        //total display
         JPanel display = new JPanel();
         display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
 
