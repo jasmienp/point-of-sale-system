@@ -107,7 +107,7 @@ public class Main {
         topDisplay.setBackground(Color.decode("#FFFFFF"));
         topDisplay.setBorder(new MatteBorder(1,0,0,0, Color.decode("#474747")));
 
-        totalDisplay totals = new totalDisplay();
+        TotalDisplay totals = new TotalDisplay();
         totals.setCartTable(cartTable);
 
         JLabel subtotalLabel = new JLabel("");

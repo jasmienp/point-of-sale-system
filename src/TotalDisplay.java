@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class totalDisplay {
+public class TotalDisplay {
     private JTable cartTable;
     final double tax = 8.00;
 
